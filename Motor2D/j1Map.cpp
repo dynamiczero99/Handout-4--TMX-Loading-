@@ -66,6 +66,7 @@ bool j1Map::Load(const char* file_name)
 
 	if(ret == true)
 	{
+		LoadMap();
 		// TODO 3: Create and call a private function to load and fill
 		// all your map data
 
@@ -86,3 +87,45 @@ bool j1Map::Load(const char* file_name)
 	return ret;
 }
 
+void j1Map::LoadMap()
+{
+	node = map_file.child("map");
+
+	// Assign the orientation of the map
+	if (node.append_attribute("orientation").as_string() == "orthogonal")
+		gameMap.orientation = ORTHOGONAL;
+
+	else if (node.append_attribute("orientation").as_string() == "isometric")
+		gameMap.orientation = ISOMETRIC;
+
+	else if (node.append_attribute("orientation").as_string() == "hexagonal")
+		gameMap.orientation = HEXAGONAL;
+
+	// ---------------------------------
+
+	// Assign the render order
+	if (node.append_attribute("renderorder").as_string() == "right-down")
+		gameMap.renderorder = RIGHTDOWN;
+
+	else if (node.append_attribute("renderorder").as_string() == "left-down")
+		gameMap.renderorder = LEFTDOWN;
+
+	else if (node.append_attribute("renderorder").as_string() == "right-up")
+		gameMap.renderorder = RIGHTUP;
+
+	else if (node.append_attribute("renderorder").as_string() == "left-up")
+		gameMap.renderorder = LEFTUP;
+
+	// ---------------------------------
+
+	// Assign uint values
+
+	gameMap.width = node.append_attribute("width").as_uint();
+	gameMap.height = node.append_attribute("height").as_uint();
+	gameMap.tilewidth = node.append_attribute("tilewidth").as_uint();
+	gameMap.tileheight = node.append_attribute("tileheight").as_uint();
+
+	// ---------------------------------
+
+	return;
+}

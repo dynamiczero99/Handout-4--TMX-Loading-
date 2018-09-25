@@ -9,27 +9,26 @@
 // TODO 2: Create a struct to hold information for a TileSet
 // Ignore Terrain Types and Tile Types for now, but we want the image!
 // ----------------------------------------------------
-
+enum orientationType
+{
+	UNIDENTIFIED_ORIENTATION,
+	ORTHOGONAL,
+	ISOMETRIC,
+	HEXAGONAL,
+};
+enum renderOrderType
+{
+	UNIDENTIFIED_RENDERORDER,
+	RIGHTDOWN,
+	LEFTDOWN,
+	RIGHTUP,
+	LEFTUP,
+};
 
 // TODO 1: Create a struct needed to hold the information to Map node
 
 struct map
 {
-	enum orientationType
-	{
-		UNIDENTIFIED_ORIENTATION,
-		ORTHOGONAL,
-		ISOMETRIC,
-		HEXAGONAL,
-	};
-	enum renderOrderType
-	{
-		UNIDENTIFIED_RENDERORDER,
-		RIGHTDOWN,
-		LEFTDOWN,
-		RIGHTUP,
-		LEFTUP,
-	};
 	orientationType orientation = UNIDENTIFIED_ORIENTATION;
 	renderOrderType renderorder = UNIDENTIFIED_RENDERORDER;
 	uint width = 0, height = 0, tilewidth = 0, tileheight = 0;
@@ -66,16 +65,18 @@ public:
 
 private:
 
+	// Load all data from the .tmx file onto the gameMap instance of the map class
 	void LoadMap();
 
 public:
 
 	// TODO 1: Add your struct for map info as public for now
-	map scene1;
+	map gameMap;
 
 private:
 
 	pugi::xml_document	map_file;
+	pugi::xml_node		node;
 	p2SString			folder;
 	bool				map_loaded;
 };
