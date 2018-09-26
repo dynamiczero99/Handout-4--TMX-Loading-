@@ -4,6 +4,7 @@
 #include "PugiXml/src/pugixml.hpp"
 #include "p2List.h"
 #include "p2Point.h"
+#include "p2SString.h"
 #include "j1Module.h"
 
 // TODO 2: Create a struct to hold information for a TileSet
@@ -26,20 +27,23 @@ enum renderOrderType
 };
 
 // TODO 1: Create a struct needed to hold the information to Map node
+struct tileset
+{
+	p2SString tilesetName = "unidentified";
+	uint tilewidth = 0, tileheight = 0, spacing = 0, margin = 0;
+	p2SString sourceAdress = "unidentified";
+};
 
 struct map
 {
 	orientationType orientation = UNIDENTIFIED_ORIENTATION;
 	renderOrderType renderorder = UNIDENTIFIED_RENDERORDER;
 	uint width = 0, height = 0, tilewidth = 0, tileheight = 0;
+
+	p2List<tileset> tilesets;
 };
 
-struct tileset
-{
-	char* tilesetName = "unidentified";
-	uint tilewidth = 0, tileheight = 0, spacing = 0, margin = 0, width = 0, height = 0;
-	char* sourceAdress = "unidentified";
-};
+
 
 // ----------------------------------------------------
 class j1Map : public j1Module
@@ -67,6 +71,7 @@ private:
 
 	// Load all data from the .tmx file onto the gameMap instance of the map class
 	void LoadMap();
+	void LoadTileset();
 
 public:
 

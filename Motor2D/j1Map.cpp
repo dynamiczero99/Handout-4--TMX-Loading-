@@ -92,38 +92,74 @@ void j1Map::LoadMap()
 	node = map_file.child("map");
 
 	// Assign the orientation of the map
-	if (node.append_attribute("orientation").as_string() == "orthogonal")
+
+	p2SString orientationRead = node.attribute("orientation").as_string();
+
+	if (orientationRead == "orthogonal")
 		gameMap.orientation = ORTHOGONAL;
 
-	else if (node.append_attribute("orientation").as_string() == "isometric")
+	else if (orientationRead == "isometric")
 		gameMap.orientation = ISOMETRIC;
 
-	else if (node.append_attribute("orientation").as_string() == "hexagonal")
+	else if (orientationRead == "hexagonal")
 		gameMap.orientation = HEXAGONAL;
 
 	// ---------------------------------
 
 	// Assign the render order
-	if (node.append_attribute("renderorder").as_string() == "right-down")
+
+	p2SString renderOrderRead = node.attribute("renderorder").as_string();
+
+	if (renderOrderRead == "right-down")
 		gameMap.renderorder = RIGHTDOWN;
 
-	else if (node.append_attribute("renderorder").as_string() == "left-down")
+	else if (renderOrderRead == "left-down")
 		gameMap.renderorder = LEFTDOWN;
 
-	else if (node.append_attribute("renderorder").as_string() == "right-up")
+	else if (renderOrderRead == "right-up")
 		gameMap.renderorder = RIGHTUP;
 
-	else if (node.append_attribute("renderorder").as_string() == "left-up")
+	else if (renderOrderRead == "left-up")
 		gameMap.renderorder = LEFTUP;
 
 	// ---------------------------------
 
 	// Assign uint values
 
-	gameMap.width = node.append_attribute("width").as_uint();
-	gameMap.height = node.append_attribute("height").as_uint();
-	gameMap.tilewidth = node.append_attribute("tilewidth").as_uint();
-	gameMap.tileheight = node.append_attribute("tileheight").as_uint();
+	gameMap.width		= node.attribute("width").as_uint();
+	gameMap.height		= node.attribute("height").as_uint();
+	gameMap.tilewidth	= node.attribute("tilewidth").as_uint();
+	gameMap.tileheight	= node.attribute("tileheight").as_uint();
+
+	// ---------------------------------
+
+	// Load all tilesets
+
+	LoadTileset();
+
+	// ---------------------------------
+
+	return;
+}
+
+void j1Map::LoadTileset()
+{
+	// Iterate tilesets while loading them into the list inside of map
+
+	for (pugi::xml_node tilesetIterator = map_file.child("map").child("tileset"); tilesetIterator; tilesetIterator = tilesetIterator.next_sibling("tileset"))
+	{
+		tileset* newTileset = new tileset();
+
+		node = node.child("tileset");
+
+		newTileset->tilesetName	= node.attribute("name").as_string();
+		newTileset->tilewidth	= node.attribute("tilewidth").as_uint();
+		newTileset->tileheight	= node.attribute("tileheight").as_uint();
+		newTileset->spacing		= node.attribute("spacing").as_uint();
+		newTileset->margin		= node.attribute("margin").as_uint();
+
+		gameMap.tilesets.add(*newTileset);
+	}
 
 	// ---------------------------------
 
